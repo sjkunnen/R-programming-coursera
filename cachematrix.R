@@ -3,38 +3,56 @@
 
 ## Write a short comment describing this function:
 ## makeCacheMatrix creates a special "matrix", which is really a list containing a function to
-## set the value of the matrix
-## get the value of the matrix
-## set the value of the inverse
-## get the value of the inverse
 
 makeCacheMatrix <- function(x = matrix()) {
-      m <- NULL
+      
+      ## set the value of the matrix
+      cachematrix <- NULL
       set <- function(y) {
             x <<- y
-            m <<- NULL
+            cachematrix <<- NULL
       }
-      get <- function() x
-      setsolve <- function(solve) m <<- solve
-      getsolve <- function() m
+      ## return the values of the matrix
+      get <- function() {
+            x
+      }
+      
+      ## set the value of the inverse matrix
+      setsolve <- function(solve) {
+            cachematrix <<- solve
+      }
+      
+      ## return the value of the inverse matrix
+      getsolve <- function() {
+            cachematrix
+      }
+      
+      ## create a list for the matrix
       list(set = set, get = get, setsolve = setsolve, getsolve = getsolve)
 }
 
 ## Write a short comment describing this function:
-## This function computes the inverse of the special "matrix" 
-## created with the above function. 
+## This function computes the inverse of the special "matrix" created with the above function. 
 ## If the inverse has already been calculated (and the matrix has not changed), 
-## then the cachesolve should retrieve the inverse from the cache.
+## then the "cacheSolve" function should retrieve the inverse from the cache.
 
 cacheSolve <- function(x, ...) {
       ## Return a matrix that is the inverse of 'x'
-      m <- x$getsolve()
-      if(!is.null(m)) {
-            message("getting cached data")
-            return(m)
+      ## First, get the matrix from cache
+      cachematrix <- x$getsolve()
+      
+      ## If the cachematrix exists, then the result is returned
+      if(!is.null(cachematrix)) {
+            message("Getting cached matrix")
+            return(cachematrix)
       }
+      ## If the cachematrix is not found, then data is assigned to x, which is a matrix
       data <- x$get()
-      m <- solve(data)
-      x$setsolve(m)
-      m
+      
+      ## The inverse of the matrix is given with the solve function
+      cachematrix <- solve(data, ...)
+      x$setsolve(cachematrix)
+      
+      ## Return the inverse matrix result:
+      cachematrix
 }
